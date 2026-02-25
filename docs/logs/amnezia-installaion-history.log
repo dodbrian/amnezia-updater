@@ -1,0 +1,340 @@
+[login:root ssh:((undefined)) sid:52812 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/]: /usr/bin/env -i PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin run-parts --lsbsysinit /etc/update-motd.d
+[login:root ssh:((undefined)) sid:52812 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/]: /etc/update-motd.d/00-header
+[login:root ssh:((undefined)) sid:52812 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/]: uname -o
+[login:root ssh:((undefined)) sid:52812 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/]: uname -r
+[login:root ssh:((undefined)) sid:52812 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/]: uname -m
+[login:root ssh:((undefined)) sid:52812 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/]: /etc/update-motd.d/10-help-text
+[login:root ssh:((undefined)) sid:52812 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/]: /etc/update-motd.d/50-motd-news
+[login:root ssh:((undefined)) sid:52812 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/]: /etc/update-motd.d/91-contract-ua-esm-status
+[login:root ssh:((undefined)) sid:52812 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/]: /etc/update-motd.d/92-unattended-upgrades
+[login:root ssh:((undefined)) sid:52812 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/]: /usr/share/unattended-upgrades/update-motd-unattended-upgrades
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:52824 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: bash -c sudo docker ps --format '{{.Names}} {{.Ports}}'
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:52824 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sudo docker ps --format {{.Names}} {{.Ports}}
+[login:root ssh:((undefined)) sid:52824 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: docker ps --format {{.Names}} {{.Ports}}
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:52832 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: bash -c if which apt-get > /dev/null 2>&1; then pm=$(which apt-get); opt="--version";\
+elif which dnf > /dev/null 2>&1; then pm=$(which dnf); opt="--version";\
+elif which yum > /dev/null 2>&1; then pm=$(which yum); opt="--version";\
+elif which zypper > /dev/null 2>&1; then pm=$(which zypper); opt="--version";\
+elif which pacman > /dev/null 2>&1; then pm=$(which pacman); opt="--version";\
+else pm="uname"; opt="-a";\
+fi;\
+CUR_USER=$(whoami 2>/dev/null || echo $HOME | sed 's/.*\///');\
+echo $LANG | grep -qE '^(en_US.UTF-8|C.UTF-8|C)$' || export LC_ALL=C;\
+sudo -K;\
+cd ~;\
+if [ "$CUR_USER" = "root" ] || ( groups "$CUR_USER" | grep -E '\<(sudo|wheel)\>' ); then \
+  sudo -nu $CUR_USER $pm $opt > /dev/null; sudo -n $pm $opt > /dev/null;\
+fi
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:52832 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: which apt-get
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:52832 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: which apt-get
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:52832 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: whoami
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:52832 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: grep -qE ^(en_US.UTF-8|C.UTF-8|C)$
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:52832 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sudo -K
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:52832 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sudo -nu root /usr/bin/apt-get --version
+[login:root ssh:((undefined)) sid:52832 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: /usr/bin/apt-get --version
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:52832 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sudo -n /usr/bin/apt-get --version
+[login:root ssh:((undefined)) sid:52832 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: /usr/bin/apt-get --version
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:52844 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: bash -c if which apt-get > /dev/null 2>&1; then LOCK_CMD="fuser"; LOCK_FILE="/var/lib/dpkg/lock-frontend";\
+elif which dnf > /dev/null 2>&1; then LOCK_CMD="fuser"; LOCK_FILE="/var/cache/dnf/* /var/run/dnf/* /var/lib/dnf/* /var/lib/rpm/*";\
+elif which yum > /dev/null 2>&1; then LOCK_CMD="cat"; LOCK_FILE="/var/run/yum.pid";\
+elif which zypper > /dev/null 2>&1; then LOCK_CMD="cat"; LOCK_FILE="/var/run/zypp.pid";\
+elif which pacman > /dev/null 2>&1; then LOCK_CMD="fuser"; LOCK_FILE="/var/lib/pacman/db.lck";\
+else echo "Packet manager not found"; echo "Internal error"; exit 1; fi;\
+if command -v $LOCK_CMD > /dev/null 2>&1; then sudo $LOCK_CMD $LOCK_FILE 2>/dev/null; else echo "$LOCK_CMD not installed"; fi
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:52844 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: which apt-get
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:52844 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sudo fuser /var/lib/dpkg/lock-frontend
+[login:root ssh:((undefined)) sid:52844 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: fuser /var/lib/dpkg/lock-frontend
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:52848 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: bash -c if which apt-get > /dev/null 2>&1; then pm=$(which apt-get); silent_inst="-yq install"; check_pkgs="-yq update"; docker_pkg="docker.io"; dist="debian";\
+elif which dnf > /dev/null 2>&1; then pm=$(which dnf); silent_inst="-yq install"; check_pkgs="-yq check-update"; docker_pkg="docker"; dist="fedora";\
+elif which yum > /dev/null 2>&1; then pm=$(which yum); silent_inst="-y -q install"; check_pkgs="-y -q check-update"; docker_pkg="docker"; dist="centos";\
+elif which zypper > /dev/null 2>&1; then pm=$(which zypper); silent_inst="-nq install"; check_pkgs="-nq refresh"; docker_pkg="docker"; dist="opensuse";\
+elif which pacman > /dev/null 2>&1; then pm=$(which pacman); silent_inst="-S --noconfirm --noprogressbar --quiet"; check_pkgs="-Sup"; docker_pkg="docker"; dist="archlinux";\
+else echo "Packet manager not found"; exit 1; fi;\
+echo "Dist: $dist, Packet manager: $pm, Install command: $silent_inst, Check pkgs command: $check_pkgs, Docker pkg: $docker_pkg";\
+if [ "$dist" = "debian" ]; then export DEBIAN_FRONTEND=noninteractive; fi;\
+if ! command -v sudo > /dev/null 2>&1; then $pm $check_pkgs; $pm $silent_inst sudo; fi;\
+if ! command -v fuser > /dev/null 2>&1; then sudo $pm $check_pkgs; sudo $pm $silent_inst psmisc; fi;\
+if ! command -v lsof > /dev/null 2>&1; then sudo $pm $check_pkgs; sudo $pm $silent_inst lsof; fi;\
+if ! command -v docker > /dev/null 2>&1; then \
+  sudo $pm $check_pkgs; sudo $pm $silent_inst $docker_pkg;\
+  sleep 5; sudo systemctl enable --now docker; sleep 5;\
+fi;\
+if [ "$(cat /sys/module/apparmor/parameters/enabled 2>/dev/null)" = "Y" ]; then \
+  if ! command -v apparmor_parser > /dev/null 2>&1; then sudo $pm $check_pkgs; sudo $pm $silent_inst apparmor; fi;\
+fi;\
+if [ "$(systemctl is-active docker)" != "active" ]; then \
+  sudo $pm $check_pkgs; sudo $pm $silent_inst $docker_pkg;\
+  sleep 5; sudo systemctl start docker; sleep 5;\
+fi;\
+if ! command -v sudo > /dev/null 2>&1; then echo "Failed to install sudo, command not found"; exit 1; fi;\
+docker --version
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:52848 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: which apt-get
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:52848 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: which apt-get
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:52848 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: cat /sys/module/apparmor/parameters/enabled
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:52848 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: systemctl is-active docker
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:52848 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: docker --version
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:52859 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: bash -c which lsof > /dev/null 2>&1 || true && sudo lsof -i -P -n 2>/dev/null | grep -E ':4433 ' | grep -i tcp | grep LISTEN
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:52859 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: which lsof
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:52859 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sudo lsof -i -P -n
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:52859 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: grep -E :4433 
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:52859 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: grep -i tcp
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:52859 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: grep LISTEN
+[login:root ssh:((undefined)) sid:52859 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: lsof -i -P -n
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:52866 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: bash -c which lsof > /dev/null 2>&1 || true && sudo lsof -i -P -n 2>/dev/null | grep -E ':4433 ' | grep -i tcp | grep LISTEN
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:52866 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: which lsof
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:52866 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sudo lsof -i -P -n
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:52866 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: grep -E :4433 
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:52866 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: grep -i tcp
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:52866 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: grep LISTEN
+[login:root ssh:((undefined)) sid:52866 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: lsof -i -P -n
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:52873 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: bash -c CUR_USER=$(whoami 2>/dev/null || echo $HOME | sed 's/.*\///');\
+sudo mkdir -p /opt/amnezia/amnezia-xray;\
+sudo chown $CUR_USER /opt/amnezia/amnezia-xray;\
+if ! sudo docker network ls | grep -q amnezia-dns-net; then sudo docker network create \
+  --driver bridge \
+  --subnet=172.29.172.0/24 \
+  --opt com.docker.network.bridge.name=amn0 \
+  amnezia-dns-net;\
+fi
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:52873 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: whoami
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:52873 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sudo mkdir -p /opt/amnezia/amnezia-xray
+[login:root ssh:((undefined)) sid:52873 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: mkdir -p /opt/amnezia/amnezia-xray
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:52873 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sudo chown root /opt/amnezia/amnezia-xray
+[login:root ssh:((undefined)) sid:52873 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: chown root /opt/amnezia/amnezia-xray
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:52873 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: grep -q amnezia-dns-net
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:52873 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sudo docker network ls
+[login:root ssh:((undefined)) sid:52873 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: docker network ls
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:52873 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sudo docker network create --driver bridge --subnet=172.29.172.0/24 --opt com.docker.network.bridge.name=amn0 amnezia-dns-net
+[login:root ssh:((undefined)) sid:52873 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: docker network create --driver bridge --subnet=172.29.172.0/24 --opt com.docker.network.bridge.name=amn0 amnezia-dns-net
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:52924 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: bash -c sudo docker stop amnezia-xray;\
+sudo docker rm -fv amnezia-xray;\
+sudo docker rmi amnezia-xray
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:52924 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sudo docker stop amnezia-xray
+[login:root ssh:((undefined)) sid:52924 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: docker stop amnezia-xray
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:52924 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sudo docker rm -fv amnezia-xray
+[login:root ssh:((undefined)) sid:52924 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: docker rm -fv amnezia-xray
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:52924 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sudo docker rmi amnezia-xray
+[login:root ssh:((undefined)) sid:52924 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: docker rmi amnezia-xray
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:52946 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: bash -c sudo rm /opt/amnezia/amnezia-xray/Dockerfile
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:52946 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sudo rm /opt/amnezia/amnezia-xray/Dockerfile
+[login:root ssh:((undefined)) sid:52946 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: rm /opt/amnezia/amnezia-xray/Dockerfile
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:52948 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: bash -c scp -t  '/opt/amnezia/amnezia-xray/Dockerfile'
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:52948 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: scp -t /opt/amnezia/amnezia-xray/Dockerfile
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:52951 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: bash -c sudo docker build --no-cache --pull -t amnezia-xray /opt/amnezia/amnezia-xray
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:52951 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sudo docker build --no-cache --pull -t amnezia-xray /opt/amnezia/amnezia-xray
+[login:root ssh:((undefined)) sid:52951 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: docker build --no-cache --pull -t amnezia-xray /opt/amnezia/amnezia-xray
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:53556 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: bash -c sudo docker run -d \
+--privileged \
+--log-driver none \
+--restart always \
+--cap-add=NET_ADMIN \
+-p 4433:4433/tcp \
+--name amnezia-xray amnezia-xray
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:53556 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sudo docker run -d --privileged --log-driver none --restart always --cap-add=NET_ADMIN -p 4433:4433/tcp --name amnezia-xray amnezia-xray
+[login:root ssh:((undefined)) sid:53556 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: docker run -d --privileged --log-driver none --restart always --cap-add=NET_ADMIN -p 4433:4433/tcp --name amnezia-xray amnezia-xray
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:53634 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: bash -c sudo docker network connect amnezia-dns-net amnezia-xray
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:53634 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sudo docker network connect amnezia-dns-net amnezia-xray
+[login:root ssh:((undefined)) sid:53634 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: docker network connect amnezia-dns-net amnezia-xray
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:53683 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: bash -c sudo docker exec -i amnezia-xray bash -c 'mkdir -p /dev/net; if [ ! -c /dev/net/tun ]; then mknod /dev/net/tun c 10 200; fi'
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:53683 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sudo docker exec -i amnezia-xray bash -c mkdir -p /dev/net; if [ ! -c /dev/net/tun ]; then mknod /dev/net/tun c 10 200; fi
+[login:root ssh:((undefined)) sid:53683 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: docker exec -i amnezia-xray bash -c mkdir -p /dev/net; if [ ! -c /dev/net/tun ]; then mknod /dev/net/tun c 10 200; fi
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:53713 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: bash -c scp -t  '/tmp/ueSPWOk3ajQV09uG.tmp'
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:53713 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: scp -t /tmp/ueSPWOk3ajQV09uG.tmp
+[login:(unknown) ssh:((undefined)) sid:52767 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/]: cp /tmp/ueSPWOk3ajQV09uG.tmp /var/tmp-backups/ueSPWOk3ajQV09uG.tmp
+[login:(unknown) ssh:((undefined)) sid:52767 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/]: date
+[login:(unknown) ssh:((undefined)) sid:52767 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/]: stat -c%s /tmp/ueSPWOk3ajQV09uG.tmp
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:53718 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: bash -c sudo docker exec -i amnezia-xray mkdir -p  "$(dirname /opt/amnezia/b76nVmoFdOsYwQEy.sh)"
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:53718 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: dirname /opt/amnezia/b76nVmoFdOsYwQEy.sh
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:53718 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sudo docker exec -i amnezia-xray mkdir -p /opt/amnezia
+[login:root ssh:((undefined)) sid:53718 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: docker exec -i amnezia-xray mkdir -p /opt/amnezia
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:53743 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: bash -c sudo docker cp /tmp/ueSPWOk3ajQV09uG.tmp amnezia-xray://opt/amnezia/b76nVmoFdOsYwQEy.sh
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:53743 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sudo docker cp /tmp/ueSPWOk3ajQV09uG.tmp amnezia-xray://opt/amnezia/b76nVmoFdOsYwQEy.sh
+[login:root ssh:((undefined)) sid:53743 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: docker cp /tmp/ueSPWOk3ajQV09uG.tmp amnezia-xray://opt/amnezia/b76nVmoFdOsYwQEy.sh
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:53750 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: bash -c sudo shred -u /tmp/ueSPWOk3ajQV09uG.tmp
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:53750 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sudo shred -u /tmp/ueSPWOk3ajQV09uG.tmp
+[login:root ssh:((undefined)) sid:53750 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: shred -u /tmp/ueSPWOk3ajQV09uG.tmp
+[login:(unknown) ssh:((undefined)) sid:52767 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/]: cp /tmp/ueSPWOk3ajQV09uG.tmp /var/tmp-backups/ueSPWOk3ajQV09uG.tmp
+[login:(unknown) ssh:((undefined)) sid:52767 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/]: date
+[login:(unknown) ssh:((undefined)) sid:52767 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/]: stat -c%s /tmp/ueSPWOk3ajQV09uG.tmp
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:53756 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: bash -c sudo docker exec -i amnezia-xray bash /opt/amnezia/b76nVmoFdOsYwQEy.sh 
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:53756 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sudo docker exec -i amnezia-xray bash /opt/amnezia/b76nVmoFdOsYwQEy.sh
+[login:root ssh:((undefined)) sid:53756 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: docker exec -i amnezia-xray bash /opt/amnezia/b76nVmoFdOsYwQEy.sh
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:53797 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: bash -c sudo docker exec -i amnezia-xray rm /opt/amnezia/b76nVmoFdOsYwQEy.sh 
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:53797 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sudo docker exec -i amnezia-xray rm /opt/amnezia/b76nVmoFdOsYwQEy.sh
+[login:root ssh:((undefined)) sid:53797 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: docker exec -i amnezia-xray rm /opt/amnezia/b76nVmoFdOsYwQEy.sh
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:53821 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: bash -c sudo sysctl -w net.ipv4.ip_forward=1
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:53821 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sudo sysctl -w net.ipv4.ip_forward=1
+[login:root ssh:((undefined)) sid:53821 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sysctl -w net.ipv4.ip_forward=1
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:53823 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: bash -c sudo iptables -C INPUT -p icmp --icmp-type echo-request -j DROP || sudo iptables -A INPUT -p icmp --icmp-type echo-request -j DROP
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:53823 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sudo iptables -C INPUT -p icmp --icmp-type echo-request -j DROP
+[login:root ssh:((undefined)) sid:53823 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: iptables -C INPUT -p icmp --icmp-type echo-request -j DROP
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:53826 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: bash -c sudo iptables -C FORWARD -j DOCKER-USER || sudo iptables -A FORWARD -j DOCKER-USER
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:53826 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sudo iptables -C FORWARD -j DOCKER-USER
+[login:root ssh:((undefined)) sid:53826 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: iptables -C FORWARD -j DOCKER-USER
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:53829 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: bash -c sudo iptables -C FORWARD -j DOCKER-ISOLATION-STAGE-1 || sudo iptables -A FORWARD -j DOCKER-ISOLATION-STAGE-1; \
+sudo iptables -C FORWARD -o docker0 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT || sudo iptables -A FORWARD -o docker0 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT; \
+sudo iptables -C FORWARD -o docker0 -j DOCKER || sudo iptables -A FORWARD -o docker0 -j DOCKER; \
+sudo iptables -C FORWARD -i docker0 ! -o docker0 -j ACCEPT || sudo iptables -A FORWARD -i docker0 ! -o docker0 -j ACCEPT; \
+sudo iptables -C FORWARD -i docker0 -o docker0 -j ACCEPT || sudo iptables -A FORWARD -i docker0 -o docker0 -j ACCEPT
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:53829 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sudo iptables -C FORWARD -j DOCKER-ISOLATION-STAGE-1
+[login:root ssh:((undefined)) sid:53829 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: iptables -C FORWARD -j DOCKER-ISOLATION-STAGE-1
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:53829 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sudo iptables -C FORWARD -o docker0 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+[login:root ssh:((undefined)) sid:53829 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: iptables -C FORWARD -o docker0 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:53829 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sudo iptables -C FORWARD -o docker0 -j DOCKER
+[login:root ssh:((undefined)) sid:53829 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: iptables -C FORWARD -o docker0 -j DOCKER
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:53829 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sudo iptables -C FORWARD -i docker0 ! -o docker0 -j ACCEPT
+[login:root ssh:((undefined)) sid:53829 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: iptables -C FORWARD -i docker0 ! -o docker0 -j ACCEPT
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:53829 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sudo iptables -C FORWARD -i docker0 -o docker0 -j ACCEPT
+[login:root ssh:((undefined)) sid:53829 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: iptables -C FORWARD -i docker0 -o docker0 -j ACCEPT
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:53840 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: bash -c sudo sysctl fs.file-max=51200; \
+sudo sysctl net.core.rmem_max=67108864; \
+sudo sysctl net.core.wmem_max=67108864; \
+sudo sysctl net.core.netdev_max_backlog=250000; \
+sudo sysctl net.core.somaxconn=4096; \
+sudo sysctl net.ipv4.tcp_syncookies=1; \
+sudo sysctl net.ipv4.tcp_tw_reuse=1; \
+sudo sysctl net.ipv4.tcp_tw_recycle=0; \
+sudo sysctl net.ipv4.tcp_fin_timeout=30; \
+sudo sysctl net.ipv4.tcp_keepalive_time=1200; \
+sudo sysctl net.ipv4.ip_local_port_range="10000 65000"; \
+sudo sysctl net.ipv4.tcp_max_syn_backlog=8192; \
+sudo sysctl net.ipv4.tcp_max_tw_buckets=5000; \
+sudo sysctl net.ipv4.tcp_fastopen=3; \
+sudo sysctl net.ipv4.tcp_mem="25600 51200 102400"; \
+sudo sysctl net.ipv4.tcp_rmem="4096 87380 67108864"; \
+sudo sysctl net.ipv4.tcp_wmem="4096 65536 67108864"; \
+sudo sysctl net.ipv4.tcp_mtu_probing=1; \
+sudo sysctl net.ipv4.tcp_congestion_control=hybla
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:53840 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sudo sysctl fs.file-max=51200
+[login:root ssh:((undefined)) sid:53840 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sysctl fs.file-max=51200
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:53840 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sudo sysctl net.core.rmem_max=67108864
+[login:root ssh:((undefined)) sid:53840 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sysctl net.core.rmem_max=67108864
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:53840 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sudo sysctl net.core.wmem_max=67108864
+[login:root ssh:((undefined)) sid:53840 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sysctl net.core.wmem_max=67108864
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:53840 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sudo sysctl net.core.netdev_max_backlog=250000
+[login:root ssh:((undefined)) sid:53840 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sysctl net.core.netdev_max_backlog=250000
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:53840 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sudo sysctl net.core.somaxconn=4096
+[login:root ssh:((undefined)) sid:53840 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sysctl net.core.somaxconn=4096
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:53840 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sudo sysctl net.ipv4.tcp_syncookies=1
+[login:root ssh:((undefined)) sid:53840 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sysctl net.ipv4.tcp_syncookies=1
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:53840 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sudo sysctl net.ipv4.tcp_tw_reuse=1
+[login:root ssh:((undefined)) sid:53840 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sysctl net.ipv4.tcp_tw_reuse=1
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:53840 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sudo sysctl net.ipv4.tcp_tw_recycle=0
+[login:root ssh:((undefined)) sid:53840 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sysctl net.ipv4.tcp_tw_recycle=0
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:53840 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sudo sysctl net.ipv4.tcp_fin_timeout=30
+[login:root ssh:((undefined)) sid:53840 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sysctl net.ipv4.tcp_fin_timeout=30
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:53840 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sudo sysctl net.ipv4.tcp_keepalive_time=1200
+[login:root ssh:((undefined)) sid:53840 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sysctl net.ipv4.tcp_keepalive_time=1200
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:53840 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sudo sysctl net.ipv4.ip_local_port_range=10000 65000
+[login:root ssh:((undefined)) sid:53840 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sysctl net.ipv4.ip_local_port_range=10000 65000
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:53840 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sudo sysctl net.ipv4.tcp_max_syn_backlog=8192
+[login:root ssh:((undefined)) sid:53840 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sysctl net.ipv4.tcp_max_syn_backlog=8192
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:53840 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sudo sysctl net.ipv4.tcp_max_tw_buckets=5000
+[login:root ssh:((undefined)) sid:53840 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sysctl net.ipv4.tcp_max_tw_buckets=5000
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:53840 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sudo sysctl net.ipv4.tcp_fastopen=3
+[login:root ssh:((undefined)) sid:53840 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sysctl net.ipv4.tcp_fastopen=3
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:53840 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sudo sysctl net.ipv4.tcp_mem=25600 51200 102400
+[login:root ssh:((undefined)) sid:53840 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sysctl net.ipv4.tcp_mem=25600 51200 102400
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:53840 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sudo sysctl net.ipv4.tcp_rmem=4096 87380 67108864
+[login:root ssh:((undefined)) sid:53840 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sysctl net.ipv4.tcp_rmem=4096 87380 67108864
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:53840 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sudo sysctl net.ipv4.tcp_wmem=4096 65536 67108864
+[login:root ssh:((undefined)) sid:53840 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sysctl net.ipv4.tcp_wmem=4096 65536 67108864
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:53840 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sudo sysctl net.ipv4.tcp_mtu_probing=1
+[login:root ssh:((undefined)) sid:53840 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sysctl net.ipv4.tcp_mtu_probing=1
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:53840 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sudo sysctl net.ipv4.tcp_congestion_control=hybla
+[login:root ssh:((undefined)) sid:53840 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sysctl net.ipv4.tcp_congestion_control=hybla
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:53878 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: bash -c scp -t  '/tmp/WXYbTfXsL4pVXnHI.tmp'
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:53878 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: scp -t /tmp/WXYbTfXsL4pVXnHI.tmp
+[login:(unknown) ssh:((undefined)) sid:52767 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/]: cp /tmp/WXYbTfXsL4pVXnHI.tmp /var/tmp-backups/WXYbTfXsL4pVXnHI.tmp
+[login:(unknown) ssh:((undefined)) sid:52767 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/]: date
+[login:(unknown) ssh:((undefined)) sid:52767 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/]: stat -c%s /tmp/WXYbTfXsL4pVXnHI.tmp
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:53883 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: bash -c sudo docker exec -i amnezia-xray mkdir -p  "$(dirname /opt/amnezia/start.sh)"
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:53883 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: dirname /opt/amnezia/start.sh
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:53883 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sudo docker exec -i amnezia-xray mkdir -p /opt/amnezia
+[login:root ssh:((undefined)) sid:53883 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: docker exec -i amnezia-xray mkdir -p /opt/amnezia
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:53909 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: bash -c sudo docker cp /tmp/WXYbTfXsL4pVXnHI.tmp amnezia-xray://opt/amnezia/start.sh
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:53909 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sudo docker cp /tmp/WXYbTfXsL4pVXnHI.tmp amnezia-xray://opt/amnezia/start.sh
+[login:root ssh:((undefined)) sid:53909 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: docker cp /tmp/WXYbTfXsL4pVXnHI.tmp amnezia-xray://opt/amnezia/start.sh
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:53916 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: bash -c sudo shred -u /tmp/WXYbTfXsL4pVXnHI.tmp
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:53916 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sudo shred -u /tmp/WXYbTfXsL4pVXnHI.tmp
+[login:root ssh:((undefined)) sid:53916 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: shred -u /tmp/WXYbTfXsL4pVXnHI.tmp
+[login:(unknown) ssh:((undefined)) sid:52767 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/]: cp /tmp/WXYbTfXsL4pVXnHI.tmp /var/tmp-backups/WXYbTfXsL4pVXnHI.tmp
+[login:(unknown) ssh:((undefined)) sid:52767 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/]: date
+[login:(unknown) ssh:((undefined)) sid:52767 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/]: stat -c%s /tmp/WXYbTfXsL4pVXnHI.tmp
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:53924 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: bash -c sudo docker exec -d amnezia-xray sh -c "chmod a+x /opt/amnezia/start.sh && /opt/amnezia/start.sh"
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:53924 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sudo docker exec -d amnezia-xray sh -c chmod a+x /opt/amnezia/start.sh && /opt/amnezia/start.sh
+[login:root ssh:((undefined)) sid:53924 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: docker exec -d amnezia-xray sh -c chmod a+x /opt/amnezia/start.sh && /opt/amnezia/start.sh
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:53966 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: bash -c sudo docker exec -i amnezia-xray sh -c "xxd -p '/opt/amnezia/xray/server.json'"
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:53966 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sudo docker exec -i amnezia-xray sh -c xxd -p '/opt/amnezia/xray/server.json'
+[login:root ssh:((undefined)) sid:53966 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: docker exec -i amnezia-xray sh -c xxd -p '/opt/amnezia/xray/server.json'
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:53992 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: bash -c scp -t  '/tmp/VQajDpI3p43eEf6I.tmp'
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:53992 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: scp -t /tmp/VQajDpI3p43eEf6I.tmp
+[login:(unknown) ssh:((undefined)) sid:52767 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/]: cp /tmp/VQajDpI3p43eEf6I.tmp /var/tmp-backups/VQajDpI3p43eEf6I.tmp
+[login:(unknown) ssh:((undefined)) sid:52767 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/]: date
+[login:(unknown) ssh:((undefined)) sid:52767 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/]: stat -c%s /tmp/VQajDpI3p43eEf6I.tmp
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:53999 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: bash -c sudo docker exec -i amnezia-xray mkdir -p  "$(dirname /opt/amnezia/xray/server.json)"
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:53999 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: dirname /opt/amnezia/xray/server.json
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:53999 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sudo docker exec -i amnezia-xray mkdir -p /opt/amnezia/xray
+[login:root ssh:((undefined)) sid:53999 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: docker exec -i amnezia-xray mkdir -p /opt/amnezia/xray
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:54026 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: bash -c sudo docker cp /tmp/VQajDpI3p43eEf6I.tmp amnezia-xray://opt/amnezia/xray/server.json
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:54026 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sudo docker cp /tmp/VQajDpI3p43eEf6I.tmp amnezia-xray://opt/amnezia/xray/server.json
+[login:root ssh:((undefined)) sid:54026 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: docker cp /tmp/VQajDpI3p43eEf6I.tmp amnezia-xray://opt/amnezia/xray/server.json
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:54033 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: bash -c sudo shred -u /tmp/VQajDpI3p43eEf6I.tmp
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:54033 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sudo shred -u /tmp/VQajDpI3p43eEf6I.tmp
+[login:root ssh:((undefined)) sid:54033 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: shred -u /tmp/VQajDpI3p43eEf6I.tmp
+[login:(unknown) ssh:((undefined)) sid:52767 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/]: cp /tmp/VQajDpI3p43eEf6I.tmp /var/tmp-backups/VQajDpI3p43eEf6I.tmp
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:54036 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: bash -c sudo docker restart amnezia-xray
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:54036 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sudo docker restart amnezia-xray
+[login:root ssh:((undefined)) sid:54036 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: docker restart amnezia-xray
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:54242 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: bash -c sudo docker exec -i amnezia-xray sh -c "xxd -p '/opt/amnezia/xray/xray_public.key'"
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:54242 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sudo docker exec -i amnezia-xray sh -c xxd -p '/opt/amnezia/xray/xray_public.key'
+[login:root ssh:((undefined)) sid:54242 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: docker exec -i amnezia-xray sh -c xxd -p '/opt/amnezia/xray/xray_public.key'
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:54268 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: bash -c sudo docker exec -i amnezia-xray sh -c "xxd -p '/opt/amnezia/xray/xray_short_id.key'"
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:54268 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sudo docker exec -i amnezia-xray sh -c xxd -p '/opt/amnezia/xray/xray_short_id.key'
+[login:root ssh:((undefined)) sid:54268 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: docker exec -i amnezia-xray sh -c xxd -p '/opt/amnezia/xray/xray_short_id.key'
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:54293 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: bash -c sudo docker exec -i amnezia-xray sh -c "xxd -p '/opt/amnezia/xray/clientsTable'"
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:54293 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sudo docker exec -i amnezia-xray sh -c xxd -p '/opt/amnezia/xray/clientsTable'
+[login:root ssh:((undefined)) sid:54293 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: docker exec -i amnezia-xray sh -c xxd -p '/opt/amnezia/xray/clientsTable'
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:54318 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: bash -c sudo docker exec -i amnezia-xray sh -c "xxd -p '/opt/amnezia/xray/server.json'"
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:54318 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sudo docker exec -i amnezia-xray sh -c xxd -p '/opt/amnezia/xray/server.json'
+[login:root ssh:((undefined)) sid:54318 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: docker exec -i amnezia-xray sh -c xxd -p '/opt/amnezia/xray/server.json'
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:54343 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: bash -c sudo docker exec -i amnezia-xray sh -c "xxd -p '/opt/amnezia/xray/xray_uuid.key'"
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:54343 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sudo docker exec -i amnezia-xray sh -c xxd -p '/opt/amnezia/xray/xray_uuid.key'
+[login:root ssh:((undefined)) sid:54343 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: docker exec -i amnezia-xray sh -c xxd -p '/opt/amnezia/xray/xray_uuid.key'
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:54368 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: bash -c sudo docker exec -i amnezia-xray sh -c "xxd -p '/opt/amnezia/xray/xray_uuid.key'"
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:54368 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sudo docker exec -i amnezia-xray sh -c xxd -p '/opt/amnezia/xray/xray_uuid.key'
+[login:root ssh:((undefined)) sid:54368 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: docker exec -i amnezia-xray sh -c xxd -p '/opt/amnezia/xray/xray_uuid.key'
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:54394 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: bash -c scp -t  '/tmp/nWtNhyef3AY9YkaV.tmp'
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:54394 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: scp -t /tmp/nWtNhyef3AY9YkaV.tmp
+[login:(unknown) ssh:((undefined)) sid:52767 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/]: cp /tmp/nWtNhyef3AY9YkaV.tmp /var/tmp-backups/nWtNhyef3AY9YkaV.tmp
+[login:(unknown) ssh:((undefined)) sid:52767 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/]: date
+[login:(unknown) ssh:((undefined)) sid:52767 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/]: stat -c%s /tmp/nWtNhyef3AY9YkaV.tmp
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:54399 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: bash -c sudo docker exec -i amnezia-xray mkdir -p  "$(dirname /opt/amnezia/xray/clientsTable)"
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:54399 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: dirname /opt/amnezia/xray/clientsTable
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:54399 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sudo docker exec -i amnezia-xray mkdir -p /opt/amnezia/xray
+[login:root ssh:((undefined)) sid:54399 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: docker exec -i amnezia-xray mkdir -p /opt/amnezia/xray
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:54426 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: bash -c sudo docker cp /tmp/nWtNhyef3AY9YkaV.tmp amnezia-xray://opt/amnezia/xray/clientsTable
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:54426 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sudo docker cp /tmp/nWtNhyef3AY9YkaV.tmp amnezia-xray://opt/amnezia/xray/clientsTable
+[login:root ssh:((undefined)) sid:54426 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: docker cp /tmp/nWtNhyef3AY9YkaV.tmp amnezia-xray://opt/amnezia/xray/clientsTable
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:54434 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: bash -c sudo shred -u /tmp/nWtNhyef3AY9YkaV.tmp
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:54434 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sudo shred -u /tmp/nWtNhyef3AY9YkaV.tmp
+[login:root ssh:((undefined)) sid:54434 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: shred -u /tmp/nWtNhyef3AY9YkaV.tmp
+[login:(unknown) ssh:((undefined)) sid:52767 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/]: cp /tmp/nWtNhyef3AY9YkaV.tmp /var/tmp-backups/nWtNhyef3AY9YkaV.tmp
+[login:(unknown) ssh:((undefined)) sid:52767 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/]: date
+[login:(unknown) ssh:((undefined)) sid:52767 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/]: stat -c%s /tmp/nWtNhyef3AY9YkaV.tmp
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:54440 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: bash -c scp -t  '/tmp/K4bdZTIByZSUQaPv.tmp'
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:54440 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: scp -t /tmp/K4bdZTIByZSUQaPv.tmp
+[login:(unknown) ssh:((undefined)) sid:52767 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/]: cp /tmp/K4bdZTIByZSUQaPv.tmp /var/tmp-backups/K4bdZTIByZSUQaPv.tmp
+[login:(unknown) ssh:((undefined)) sid:52767 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/]: date
+[login:(unknown) ssh:((undefined)) sid:52767 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/]: stat -c%s /tmp/K4bdZTIByZSUQaPv.tmp
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:54445 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: bash -c sudo docker exec -i amnezia-xray mkdir -p  "$(dirname /opt/amnezia/xray/clientsTable)"
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:54445 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: dirname /opt/amnezia/xray/clientsTable
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:54445 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sudo docker exec -i amnezia-xray mkdir -p /opt/amnezia/xray
+[login:root ssh:((undefined)) sid:54445 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: docker exec -i amnezia-xray mkdir -p /opt/amnezia/xray
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:54472 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: bash -c sudo docker cp /tmp/K4bdZTIByZSUQaPv.tmp amnezia-xray://opt/amnezia/xray/clientsTable
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:54472 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sudo docker cp /tmp/K4bdZTIByZSUQaPv.tmp amnezia-xray://opt/amnezia/xray/clientsTable
+[login:root ssh:((undefined)) sid:54472 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: docker cp /tmp/K4bdZTIByZSUQaPv.tmp amnezia-xray://opt/amnezia/xray/clientsTable
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:54479 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: bash -c sudo shred -u /tmp/K4bdZTIByZSUQaPv.tmp
+[login:root ssh:(127.0.0.1 42050 127.0.0.1 22) sid:54479 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: sudo shred -u /tmp/K4bdZTIByZSUQaPv.tmp
+[login:root ssh:((undefined)) sid:54479 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/root]: shred -u /tmp/K4bdZTIByZSUQaPv.tmp
+[login:(unknown) ssh:((undefined)) sid:52767 tty:(none) ((none)/(none)) uid:root(0)/root(0) cwd:/]: cp /tmp/K4bdZTIByZSUQaPv.tmp /var/tmp-backups/K4bdZTIByZSUQaPv.tmp
