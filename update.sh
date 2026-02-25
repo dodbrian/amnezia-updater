@@ -7,11 +7,12 @@ CONTAINER_NAME="amnezia-xray"
 CONTAINER_PATH="/opt/amnezia/xray"
 
 usage() {
-    echo "Usage: $0 <command> [archive]"
+    echo "Usage: $0 <command> [args]"
     echo ""
     echo "Commands:"
     echo "  backup             - Archive and backup files from /opt/amnezia/xray in the container"
-    echo "  restore <archive>   - Restore files from specified local archive to /opt/amnezia/xray in the container"
+    echo "  restore <archive>  - Restore files from specified local archive to /opt/amnezia/xray in the container"
+    echo "  build <version|--latest> - Build amnezia-xray image on remote VPS using remote Dockerfile"
     exit 1
 }
 
@@ -86,6 +87,60 @@ restore() {
     echo "Restore completed"
 }
 
+resolve_latest_xray_release() {
+    local response
+    local latest
+
+    response=$(curl -fsSL "https://api.github.com/repos/XTLS/Xray-core/releases/latest")
+    latest=$(printf '%s\n' "$response" | sed -nE 's/^[[:space:]]*"tag_name":[[:space:]]*"([^"]+)".*/\1/p' | head -n1)
+
+    if [ -z "$latest" ]; then
+        echo "Error: Failed to resolve latest Xray release"
+        exit 1
+    fi
+
+    echo "$latest"
+}
+
+build() {
+    if [ $# -ne 1 ]; then
+        echo "Error: build requires exactly one argument: <version|--latest>"
+        usage
+    fi
+
+    local requested_version="$1"
+    local release_version
+    local remote_build_dir="/opt/amnezia/amnezia-xray"
+    local remote_dockerfile="$remote_build_dir/Dockerfile"
+
+    if [ "$requested_version" = "--latest" ]; then
+        release_version=$(resolve_latest_xray_release)
+        echo "Resolved latest Xray release: $release_version"
+    else
+        release_version="$requested_version"
+    fi
+
+    if ! [[ "$release_version" =~ ^v ]]; then
+        echo "Error: XRAY_RELEASE must start with 'v' (example: v25.8.3)"
+        exit 1
+    fi
+
+    if ! ssh "$REMOTE_HOST" "test -f $remote_dockerfile"; then
+        echo "Error: Remote Dockerfile not found: $remote_dockerfile"
+        exit 1
+    fi
+
+    if ! ssh "$REMOTE_HOST" "grep -q '^ARG XRAY_RELEASE=' $remote_dockerfile"; then
+        echo "Error: Remote Dockerfile does not contain ARG XRAY_RELEASE"
+        exit 1
+    fi
+
+    echo "Building amnezia-xray image on $REMOTE_HOST with XRAY_RELEASE=$release_version..."
+    ssh "$REMOTE_HOST" "docker build --no-cache --pull --build-arg XRAY_RELEASE=$release_version -t amnezia-xray $remote_build_dir"
+
+    echo "Build completed on $REMOTE_HOST"
+}
+
 if [ $# -lt 1 ]; then
     usage
 fi
@@ -101,6 +156,9 @@ case "$COMMAND" in
     restore)
         check_container
         restore "$@"
+        ;;
+    build)
+        build "$@"
         ;;
     *)
         echo "Unknown command: $COMMAND"
