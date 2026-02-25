@@ -1,3 +1,5 @@
 *.tmp
 
 !docs/logs/*.tmp
+
+amnezia-xray-backup-*.tar.gz
