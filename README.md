@@ -99,10 +99,6 @@ The Dockerfile builds an Alpine Linux container with:
 docker build -t amnezia-xray .
 ```
 
-### Exposed Ports
-
-- `4433/tcp` - VPN traffic
-
 ## Security Considerations
 
 - Backup archives contain sensitive VPN keys - store securely
