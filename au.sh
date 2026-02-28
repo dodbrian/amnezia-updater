@@ -11,10 +11,31 @@ REMOTE_HOST=""
 REMOTE_PORT=""
 CONTAINER_NAME="amnezia-xray"
 CONTAINER_PATH="/opt/amnezia/xray"
+DRY_RUN="0"
+COLOR_YELLOW=""
+COLOR_RESET=""
+
+init_colors() {
+    local colors
+
+    if [ ! -t 1 ] || ! command -v tput >/dev/null 2>&1; then
+        return
+    fi
+
+    colors=$(tput colors 2>/dev/null || echo 0)
+    if [ "$colors" -ge 8 ]; then
+        COLOR_YELLOW=$(tput setaf 3)
+        COLOR_RESET=$(tput sgr0)
+    fi
+}
+
+dry_run_echo() {
+    echo "${COLOR_YELLOW}$*${COLOR_RESET}"
+}
 
 usage() {
     echo "$TOOL_NAME"
-    echo "Usage: $0 [--server <host>] [--port <port>] <command> [args]"
+    echo "Usage: $0 [--server <host>] [--port <port>] [--dry-run] <command> [args]"
     echo ""
     echo "Commands:"
     echo "  backup             - Archive and backup files from /opt/amnezia/xray in the container"
@@ -27,6 +48,7 @@ usage() {
     echo "Global options:"
     echo "  --server, -s <host> - Override configured server for current command"
     echo "  --port, -p <port>   - Override configured SSH port for current command"
+    echo "  --dry-run           - For update: run checks/planning without changing deployment"
     exit 1
 }
 
@@ -126,11 +148,58 @@ remote_scp_to() {
     scp -P "$REMOTE_PORT" "$local_path" "$REMOTE_HOST:$remote_path"
 }
 
+run_remote_command() {
+    local command="$1"
+    local mutating="${2:-0}"
+
+    if [ "$DRY_RUN" = "1" ] && [ "$mutating" = "1" ]; then
+        dry_run_echo "Dry-run: would run on $REMOTE_HOST: $command"
+        return 0
+    fi
+
+    remote_ssh "$command"
+}
+
+run_remote_scp_to() {
+    local local_path="$1"
+    local remote_path="$2"
+    local mutating="${3:-0}"
+
+    if [ "$DRY_RUN" = "1" ] && [ "$mutating" = "1" ]; then
+        dry_run_echo "Dry-run: would copy to $REMOTE_HOST:$remote_path from $local_path"
+        return 0
+    fi
+
+    remote_scp_to "$local_path" "$remote_path"
+}
+
 check_container() {
     if ! remote_ssh "docker ps --format '{{.Names}}' | grep -q '^${CONTAINER_NAME}$'"; then
         echo "Error: Container $CONTAINER_NAME is not running"
         exit 1
     fi
+}
+
+detect_container_tcp_mapping() {
+    local mapping
+    local host_port
+    local container_port
+
+    mapping=$(remote_ssh "docker port $CONTAINER_NAME | awk '/\\/tcp/ && /->/ {container=\$1; host=\$3; sub(/^.*:/, \"\", host); print host \":\" container; exit}'")
+
+    if [ -z "$mapping" ]; then
+        echo "Error: Failed to detect existing TCP port mapping for $CONTAINER_NAME"
+        exit 1
+    fi
+
+    host_port="${mapping%%:*}"
+    container_port="${mapping#*:}"
+    container_port="${container_port%/tcp}"
+
+    validate_port "$host_port"
+    validate_port "$container_port"
+
+    echo "$mapping"
 }
 
 backup() {
@@ -186,15 +255,19 @@ restore() {
     
     REMOTE_TMP_DIR="/tmp/amnezia-restore-$$"
     
-    remote_ssh "mkdir -p $REMOTE_TMP_DIR"
+    run_remote_command "mkdir -p $REMOTE_TMP_DIR" 1
     
-    remote_scp_to "$ARCHIVE_FILE" "$REMOTE_TMP_DIR/"
+    run_remote_scp_to "$ARCHIVE_FILE" "$REMOTE_TMP_DIR/" 1
     
     ARCHIVE_BASENAME=$(basename "$ARCHIVE_FILE")
     
-    remote_ssh "cd $REMOTE_TMP_DIR && tar -xzf $ARCHIVE_BASENAME && rm -f $ARCHIVE_BASENAME && docker cp . ${CONTAINER_NAME}:${CONTAINER_PATH}/ && rm -rf $REMOTE_TMP_DIR"
+    run_remote_command "cd $REMOTE_TMP_DIR && tar -xzf $ARCHIVE_BASENAME && rm -f $ARCHIVE_BASENAME && docker cp . ${CONTAINER_NAME}:${CONTAINER_PATH}/ && rm -rf $REMOTE_TMP_DIR" 1
     
-    echo "Restore completed"
+    if [ "$DRY_RUN" = "1" ]; then
+        dry_run_echo "Dry-run: restore simulation completed"
+    else
+        echo "Restore completed"
+    fi
 }
 
 resolve_latest_xray_release() {
@@ -256,6 +329,7 @@ update() {
     local archive_file
     local old_container_name
     local remote_startup_backup
+    local tcp_mapping
 
     if [ $# -ne 0 ]; then
         echo "Error: update does not accept arguments"
@@ -269,44 +343,56 @@ update() {
 
     check_container
 
+    echo "Detecting existing container TCP port mapping..."
+    tcp_mapping=$(detect_container_tcp_mapping)
+    echo "Reusing TCP mapping: $tcp_mapping"
+
     echo "Creating pre-update backup..."
     backup
     archive_file="./$ARCHIVE_NAME"
+
+    if [ "$DRY_RUN" = "1" ]; then
+        dry_run_echo "Dry-run mode enabled: mutating deployment commands will be skipped"
+    fi
 
     old_container_name="${CONTAINER_NAME}-old-$(date +%Y%m%d-%H%M%S)"
     remote_startup_backup="/tmp/amnezia-startup-$$.sh"
 
     echo "Stopping existing container and preserving it as $old_container_name..."
-    remote_ssh "docker stop $CONTAINER_NAME && docker rename $CONTAINER_NAME $old_container_name"
+    run_remote_command "docker stop $CONTAINER_NAME && docker rename $CONTAINER_NAME $old_container_name" 1
 
     echo "Backing up startup script from preserved container..."
-    remote_ssh "if docker cp ${old_container_name}:/opt/amnezia/start.sh $remote_startup_backup 2>/dev/null; then echo 'Startup script backup created'; else echo 'Warning: /opt/amnezia/start.sh not found in old container, image default will be used'; fi"
+    run_remote_command "if docker cp ${old_container_name}:/opt/amnezia/start.sh $remote_startup_backup 2>/dev/null; then echo 'Startup script backup created'; else echo 'Warning: /opt/amnezia/start.sh not found in old container, image default will be used'; fi" 1
 
     echo "Creating new container from existing image..."
-    remote_ssh "docker run -d --privileged --log-driver none --restart always --cap-add=NET_ADMIN -p 4433:4433/tcp --name $CONTAINER_NAME $image_name"
+    run_remote_command "docker run -d --privileged --log-driver none --restart always --cap-add=NET_ADMIN -p $tcp_mapping --name $CONTAINER_NAME $image_name" 1
 
     echo "Connecting container to amnezia-dns-net..."
-    remote_ssh "docker network connect amnezia-dns-net $CONTAINER_NAME"
+    run_remote_command "docker network connect amnezia-dns-net $CONTAINER_NAME" 1
 
     echo "Ensuring TUN device exists on host..."
-    remote_ssh "mkdir -p /dev/net && (test -c /dev/net/tun || mknod /dev/net/tun c 10 200)"
+    run_remote_command "mkdir -p /dev/net && (test -c /dev/net/tun || mknod /dev/net/tun c 10 200)" 1
 
     echo "Restoring startup script into new container (Phase 10 parity)..."
-    remote_ssh "if [ -f $remote_startup_backup ]; then docker cp $remote_startup_backup ${CONTAINER_NAME}:/opt/amnezia/start.sh && rm -f $remote_startup_backup; fi"
+    run_remote_command "if [ -f $remote_startup_backup ]; then docker cp $remote_startup_backup ${CONTAINER_NAME}:/opt/amnezia/start.sh && rm -f $remote_startup_backup; fi" 1
 
     echo "Restoring keys and configuration into new container..."
     restore "$archive_file"
 
     echo "Restarting container..."
-    remote_ssh "docker restart $CONTAINER_NAME"
+    run_remote_command "docker restart $CONTAINER_NAME" 1
 
     echo "Checking new container stability..."
-    remote_ssh "for i in 1 2 3; do sleep 5; if [ \"\$(docker inspect -f '{{.State.Running}}' $CONTAINER_NAME 2>/dev/null)\" != \"true\" ]; then exit 1; fi; done"
+    run_remote_command "for i in 1 2 3; do sleep 5; if [ \"\$(docker inspect -f '{{.State.Running}}' $CONTAINER_NAME 2>/dev/null)\" != \"true\" ]; then exit 1; fi; done" 1
 
     echo "New container is stable. Removing preserved old container $old_container_name..."
-    remote_ssh "docker rm -fv $old_container_name"
+    run_remote_command "docker rm -fv $old_container_name" 1
 
-    echo "Update completed successfully"
+    if [ "$DRY_RUN" = "1" ]; then
+        dry_run_echo "Dry-run completed successfully"
+    else
+        echo "Update completed successfully"
+    fi
     echo "Backup archive retained at: $archive_file"
 }
 
@@ -354,6 +440,10 @@ while [ $# -gt 0 ]; do
         -h|--help)
             usage
             ;;
+        --dry-run)
+            DRY_RUN="1"
+            shift
+            ;;
         -* )
             echo "Unknown option: $1"
             usage
@@ -368,8 +458,15 @@ if [ $# -lt 1 ]; then
     usage
 fi
 
+init_colors
+
 COMMAND="$1"
 shift
+
+if [ "$DRY_RUN" = "1" ] && [ "$COMMAND" != "update" ]; then
+    echo "Error: --dry-run is currently supported only with the update command"
+    exit 1
+fi
 
 if [ "$COMMAND" = "config" ]; then
     if [ $# -ne 0 ]; then
