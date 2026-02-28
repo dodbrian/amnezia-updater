@@ -4,9 +4,9 @@ A CLI tool for managing Amnezia VPN (Xray-core) deployments on a remote VPS via 
 
 ## Overview
 
-Amnezia Updater automates the deployment and maintenance of Amnezia VPN servers running Xray-core in Docker containers. It provides commands for building, updating, backing up, and restoring VPN configurations.
+Amnezia Updater automates the maintenance of Amnezia VPN servers running Xray-core in Docker containers. It provides commands for building, updating, backing up, and restoring VPN configurations.
 
-**Important:** This tool is only for updating an existing Amnezia VPN installation. It cannot install Amnezia VPN from scratch. You must first install Amnezia VPN using the [official Amnezia client](https://amnezia.org/download) (mobile app or desktop application) on your VPS before using this tool.
+**Important:** This tool is only for updating an existing Amnezia VPN installation. It cannot install Amnezia VPN from scratch. You must first install Amnezia VPN using the [official Amnezia client](https://amnezia.org/downloads) (mobile app or desktop application) on your VPS before using this tool.
 
 ## Requirements
 
