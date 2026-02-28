@@ -6,13 +6,15 @@ A CLI tool for managing Amnezia VPN (Xray-core) deployments on a remote VPS via 
 
 Amnezia Updater automates the deployment and maintenance of Amnezia VPN servers running Xray-core in Docker containers. It provides commands for building, updating, backing up, and restoring VPN configurations.
 
+**Important:** This tool is only for updating an existing Amnezia VPN installation. It cannot install Amnezia VPN from scratch. You must first install Amnezia VPN using the [official Amnezia client](https://amnezia.org/download) (mobile app or desktop application) on your VPS before using this tool.
+
 ## Requirements
 
-- SSH access to a remote VPS
-- Docker installed on the remote VPS
-- `curl`, `tar`, `ssh`, `scp` on the local machine
+- `ssh` and `scp` on the local machine
 
 ## Installation
+
+Download the au.sh script:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/dodbrian/amnezia-updater/main/au.sh -o au.sh
@@ -20,6 +22,8 @@ chmod +x au.sh
 ```
 
 ## Quick Start
+
+This tool assumes you already have an Amnezia VPN installation on your VPS (installed via the official Amnezia client).
 
 1. Configure your VPS connection:
 
@@ -71,11 +75,12 @@ REMOTE_HOST=your-vps.example.com
 REMOTE_PORT=22
 ```
 
-## Remote VPS Requirements
+## Prerequisites
 
-The remote VPS must have:
+Your remote VPS must already have Amnezia VPN installed (via the official Amnezia client). The installer sets up Docker, creates the necessary directory structure, and deploys the initial container.
 
-- Docker installed and running
+The VPS must also have:
+
 - SSH access with key-based authentication
 - The following directory structure:
   - `/opt/amnezia/amnezia-xray/Dockerfile` - The Docker image definition
