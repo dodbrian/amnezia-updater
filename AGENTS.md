@@ -1,137 +1,156 @@
-# AGENTS.md - Amnezia VPN Automation
+# AGENTS.md - Amnezia Updater
 
-This repository contains infrastructure-as-code for deploying and automating Amnezia VPN updates on a VPS.
+Guidance for agentic coding tools working in `/home/denis/source/amnezia`.
 
-## Project Overview
+## Project Snapshot
+- Purpose: update and maintain an existing Amnezia VPN (Xray-core) deployment.
+- Primary code: `au.sh` (Bash CLI for config/build/update/backup/restore/version).
+- Container build: `Dockerfile` (Alpine + Xray + startup script + sysctl tuning).
+- This repo is not a full installer; it operates on an already-installed remote environment.
+- Remote operations happen through SSH/SCP.
 
-- Purpose: Deploy and automate Amnezia VPN with Xray-core on a remote VPS
-- Remote Access: `ssh amnezia`
-- Stack: Docker, Alpine Linux, Xray-core
+## Repository Files
+- `au.sh` - operational CLI logic and safety checks.
+- `Dockerfile` - image definition used by remote `build` flow.
+- `README.md` - user docs and examples.
+- `docs/` - notes/log artifacts.
 
-## Build/Deploy Commands
+## Cursor and Copilot Rules
+- `.cursor/rules/` not found.
+- `.cursorrules` not found.
+- `.github/copilot-instructions.md` not found.
+- No extra editor-agent policy files are currently active.
 
-### Build Docker Image
+## Tooling Expectations
+- Local required: `bash`, `ssh`, `scp`.
+- Optional but recommended: `shellcheck`, `shfmt`, Docker CLI.
+- Remote required: Docker engine, existing Amnezia container/network setup.
+- Config file location: `${XDG_CONFIG_HOME:-$HOME/.config}/amnezia-updater/config`.
+
+## Build Commands
+- Local image build:
 ```bash
 docker build -t amnezia-xray .
 ```
-
-### Deploy with Docker Compose
+- Remote build with explicit Xray release:
 ```bash
-docker-compose up -d --build
+./au.sh build v25.8.3
+```
+- Remote build with latest Xray release:
+```bash
+./au.sh build --latest
 ```
 
-### Deploy on Remote VPS
+## Lint and Static Validation
+- Bash syntax check (always available):
 ```bash
-ssh amnezia "cd /path/to/amnezia && docker-compose up -d --build"
+bash -n au.sh
+```
+- ShellCheck (if installed):
+```bash
+shellcheck au.sh
+```
+- Formatting diff (if `shfmt` installed):
+```bash
+shfmt -d -i 4 -ci -bn au.sh
 ```
 
-### View Logs
+## Test Strategy
+- There is no formal unit/integration test suite in this repository.
+- Validation is command-level and environment-level.
+- Use static checks locally and runtime checks against the target VPS.
+
+## Single-Test Guidance (Important)
+- If asked to run a single test, prefer this focused check:
 ```bash
-docker logs amnezia-xray -f
+bash -n au.sh
+```
+- If SSH config is ready and remote checks are possible, use:
+```bash
+./au.sh version
+```
+- After modifying deploy/update flows, use:
+```bash
+./au.sh update --dry-run
 ```
 
-### Stop Services
+## Manual Runtime Verification
+- Confirm container exists and is running:
 ```bash
-docker-compose down
+ssh amnezia "docker ps --format '{{.Names}}' | grep '^amnezia-xray$'"
 ```
-
-### Update Xray Version
-Update the `XRAY_RELEASE` ARG in Dockerfile (line 5) to the desired version tag from:
-https://github.com/XTLS/Xray-core/releases
-
-## Testing
-
-This is an infrastructure repository with no automated tests. Manual verification steps:
-
-1. Check container is running: `docker ps | grep amnezia-xray`
-2. Check port is listening: `netstat -tlnp | grep 4433`
-3. Test VPN connectivity from a client
+- Check deployed Xray binary/version:
+```bash
+ssh amnezia "docker exec amnezia-xray xray version"
+```
+- Inspect port mappings:
+```bash
+ssh amnezia "docker port amnezia-xray"
+```
+- Watch recent logs:
+```bash
+ssh amnezia "docker logs --tail 100 -f amnezia-xray"
+```
 
 ## Code Style Guidelines
 
-### Dockerfile Conventions
+### General Principles
+- Keep edits minimal and scoped to the requested behavior.
+- Preserve existing CLI UX text style unless asked to revise wording globally.
+- Prefer extending existing helpers over introducing parallel logic paths.
+- Avoid unnecessary dependencies and avoid broad refactors.
 
-- Use Alpine Linux as base image for minimal footprint
-- Pin versions explicitly (e.g., `alpine:3.15`, `XRAY_RELEASE=v26.2.6`)
-- Combine RUN commands with `&&` to minimize layers
-- Use LABEL for metadata and maintainer info
-- Set environment variables with ENV directive
-- Use dumb-init as entrypoint for proper signal handling
-- Clean up temporary files in the same RUN layer
-- Quote strings in scripts to prevent word splitting
+### Imports / Sourcing
+- There are no imports/modules in current code.
+- If adding sourced shell files, use explicit paths and existence checks.
+- Keep sourcing predictable and near the top of the script.
 
-### docker-compose.yml Conventions
+### Formatting
+- Follow existing 4-space indentation in `au.sh`.
+- Keep one blank line between function blocks.
+- Wrap long command pipelines for readability.
+- Avoid trailing whitespace and noisy alignment changes.
 
-- Use version 3.x compose file format (implicit in modern Docker)
-- Name services descriptively (e.g., `amnezia-xray`)
-- Use `restart: always` for production services
-- Define custom networks with explicit subnet/gateway
-- Use `privileged: true` and `NET_ADMIN` capability only when required
-- Expose only necessary ports
+### Types and Data Handling
+- Treat CLI args, archive names, and SSH values as untrusted input.
+- Validate numeric values (ports) with regex and range checks.
+- Use Bash-safe tests: `[[ ... ]]` for expressions; quote expansions by default.
+- Prefer explicit variable names over short abbreviations.
 
-### General Infrastructure Style
+### Naming Conventions
+- Global constants/config-like vars: uppercase (`DEFAULT_PORT`, `CONTAINER_NAME`).
+- Local vars: lowercase snake_case (`remote_build_dir`, `archive_file`).
+- Functions: lowercase snake_case verbs (`validate_port`, `check_container`).
+- Keep command names consistent and imperative (`build`, `update`, `restore`).
 
-- Use meaningful container names
-- Document any security-sensitive configurations (privileged mode, capabilities)
-- Keep configuration values (ports, versions) as variables or clearly commented
-- Follow 2-space indentation in YAML files
-- Quote strings that contain special characters
+### Error Handling
+- Fail fast with clear messages: `echo "Error: ..."` and `exit 1`.
+- Validate preconditions before mutating remote state.
+- Never suppress SSH/Docker/tar failures unless intentionally handled.
+- Preserve rollback/safety behavior in `update` flow.
 
-## Repository Structure
+### Bash-Specific Rules
+- Keep shebang as `#!/bin/bash`.
+- Keep `set -e` unless there is a strong reason to change behavior.
+- Use `local` for function-scoped variables.
+- Quote variables in commands (`"$var"`) unless splitting is explicitly desired.
+- Prefer helper wrappers (`remote_ssh`, `run_remote_command`, SCP wrappers).
+- Preserve `DRY_RUN` semantics for all mutating operations.
 
-```
-/home/denis/source/amnezia/
-├── Dockerfile           # Container definition for Amnezia Xray
-├── docker-compose.yml   # Service orchestration
-└── AGENTS.md           # This file
-```
+### Dockerfile Rules
+- Keep base image and major tool versions explicit.
+- Keep `ARG XRAY_RELEASE` flow intact with `v...` tag expectations.
+- Maintain stable entrypoint contract: `dumb-init` + `/opt/amnezia/start.sh`.
+- Be careful with sysctl/security changes; document rationale in commit/PR.
 
-## VPS Access
+## Operational Safety for Agents
+- Read `README.md`, `au.sh`, and `Dockerfile` before making code changes.
+- After editing `au.sh`, run at least `bash -n au.sh`.
+- If available, also run `shellcheck au.sh` and address high-signal findings.
+- For remote-impacting changes, recommend `./au.sh update --dry-run` then `./au.sh version`.
+- Do not commit backup archives, secrets, private keys, or host-specific credentials.
 
-The VPS is accessible via SSH alias:
-```bash
-ssh amnezia
-```
-
-When making changes:
-1. Test locally if possible
-2. Deploy to VPS via SSH for production testing
-3. Verify service health after deployment
-
-## Version Updates
-
-To update Xray-core:
-
-1. Check latest release: https://github.com/XTLS/Xray-core/releases
-2. Update `XRAY_RELEASE` ARG in Dockerfile
-3. Rebuild and redeploy
-
-## Security Considerations
-
-- The container runs in privileged mode with NET_ADMIN capability
-- Port 4433 is exposed for VPN traffic
-- Custom bridge network `amn0` is created for isolation
-- System-level configurations (sysctl, limits) are applied for performance
-
-## Troubleshooting
-
-```bash
-# Check container status
-ssh amnezia "docker ps -a | grep amnezia"
-
-# View container logs
-ssh amnezia "docker logs amnezia-xray --tail 100"
-
-# Check Xray binary
-ssh amnezia "docker exec amnezia-xray xray version"
-
-# Verify network
-ssh amnezia "docker network inspect amnezia-dns-net"
-```
-
-## Notes for Agents
-
-- This is infrastructure, not application code - no lint/tests to run
-- Always verify deployment success after changes
-- Check Xray-core releases for security updates
-- The VPS uses SSH key authentication (alias: amnezia)
+## Known Constraints
+- No CI workflow is defined in this repo.
+- No docker-compose file is present at repository root.
+- End-to-end confidence depends on access to a real VPS environment.
